@@ -1,8 +1,6 @@
 import express from 'express';
+import { Room } from '../models/Rooms';
 
-export function GetLAE(req: express.Request, res: express.Response) {
-    const { date } = req.params;
-    console.log(date);
-    res.status(200);
-    return res.json({result: 'ok'})
+export async function  GetLAE(req: express.Request, res: express.Response) {
+  const { date } = req.params;
 }

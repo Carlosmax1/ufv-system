@@ -14,12 +14,12 @@ export async function createLAE(req: express.Request, res: express.Response) {
 }
 
 /*
-      id: string
-      nome: string
-      horario_inicio: string
-      data_disponivel: string
-      responsavel: string
-      pessoa_que_cadastrou: string
-      vagas: number
-      createDate: date
-  */
+  id: string
+  nome: string
+  horario_inicio: string
+  data_disponivel: string
+  responsavel: string
+  pessoa_que_cadastrou: string
+  vagas: number
+  createDate: date
+*/

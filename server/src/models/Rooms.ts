@@ -7,7 +7,7 @@ const RoomSchema: Schema = new Schema({
   date_available: {type: String, require: true},
   responsible: {type: String, require: true},
   user_create: {type: String, require: true},
-  surge: {type: Number, require: true},
+  spots: {type: Number, require: true},
   createDate: {type: Date, require: true},
 })
 
