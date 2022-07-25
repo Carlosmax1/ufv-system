@@ -1,10 +1,22 @@
 import { Button, TextField } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Form } from "../../styles/formStyle";
+import axios from "axios";
+
+type validationProps = {
+  day: string;
+  month: string;
+  year: string;
+};
 
 export default function Forms() {
 
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
+  const [responsible, setResponsible] = useState('');
+  const [timeStart, setTimeStart] = useState('');
+  const [dateAvailable, setDateAvailable] = useState('');
+  const [spots, setSpots] = useState('');
 
   const hoverInput = {
     '& .MuiOutlinedInput-root': {
@@ -37,10 +49,36 @@ export default function Forms() {
     backgroundColor: '#d9d9d9' 
   }
 
+  function validation(){
+    const newDay = dateAvailable.slice(8);
+    const newMonth = dateAvailable.slice(5,7);
+    const newYear = dateAvailable.slice(0,4);
+    return `${newDay}-${newMonth}-${newYear}`;
+  }
+
+  const handleSubmit = async (event: React.FormEvent) =>{
+    event.preventDefault();
+    setLoading(true);
+    const data = {
+      name: name,
+      time_start: timeStart,
+      date_available: validation(),
+      responsible: responsible,
+      user_create: "Admin",
+      spots: parseInt(spots)
+    };
+    console.log(data);
+    await axios.post(`http://localhost:3001/api/v1/create`, data)
+      .then((response) => console.log(response))
+        .catch((error) => console.log(error))
+          .finally(() => setLoading(false));
+  }
+
   return (
     <>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <TextField
+          onChange={(e) => setName(e.target.value)}
           required
           label='Nome'
           type='text'
@@ -48,28 +86,35 @@ export default function Forms() {
           value={name}
         />
         <TextField
+          onChange={(e) => setTimeStart(e.target.value)}
           required
           type='time'
           sx={hoverInput}
           hiddenLabel
         />
         <TextField
+          onChange={(e) => setDateAvailable(e.target.value)}
           required
           type='date'
           sx={hoverInput}
           hiddenLabel
         />
         <TextField
+          onChange={(e) => setResponsible(e.target.value)}
+          required
           label='Responsavel'
           type='text'
           sx={hoverInput}
         />
         <TextField
+          onChange={(e) => setSpots(e.target.value)}
+          required
           label='Vagas'
           type='number'
           sx={hoverInput}
         />
         <Button
+          type="submit"
           variant="contained"
           sx={buttonStyle}
         >

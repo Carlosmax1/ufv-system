@@ -4,22 +4,21 @@ dotenv.config();
 import express from "express";
 import { routes } from "./routes";
 import { connectDB } from "./database/db";
-import cors from 'cors';
 
 const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.header(
-      'Access-Control-Allow-Header',
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  );
-
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Headers",
+    "Origin, X-Requeted-With, Content-Type, Accept, Authorization, RBR");
+  if (req.headers.origin) {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+  }
   if (req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-      return res.status(200).send({});
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+    return res.status(200).json({});
   }
   next();
 })

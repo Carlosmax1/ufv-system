@@ -1,39 +1,62 @@
-import axios from "axios";
-import { Container } from "../../styles/roomStyle";
-import { useEffect, useState } from "react";
-import { AxiosResponse } from "axios";
+import { Container, Box, NameRoom } from "../../styles/roomStyle";
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
 
-export default function Rooms(){
+type RoomsProps = {
+  rooms: [{
+    id: string;
+    name: string;
+    time_start: string;
+    date_available: string;
+    responsible: string;
+    user_create: string;
+    spots: string;
+    createDate: string;
+  }],
+  isLoading?: boolean;
+}
 
-  const [rooms, setRooms] = useState<AxiosResponse>();
-  const [loading, setLoading] = useState(true);
+export default function Rooms({ rooms, isLoading }: RoomsProps) {
 
-  function getDate(){
-    const date = new Date();
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}` + '-' + `${month}` + '-' + `${year}`;
-  }
+  console.log(rooms);
 
-  useEffect(() => {
-    async function getRooms(){
-      await axios.get(`http://localhost:3001/api/v1/lae/${getDate()}`)
-        .then((response) => {
-          setRooms(response);
-        })
-          .catch((error) => console.log(error))
-            .finally(() => setLoading(false));
-    }
-    getRooms();
-  }, [])
-
-  return(
+  return (
     <>
       <Container>
-        <ul>
-        
-        </ul>
+        {isLoading ?
+          <CircularProgress />
+          :
+          <ul>
+            {rooms ?
+              <>
+                {rooms.map((room) => (
+                  <Box key={room.id}>
+                    <NameRoom>
+                      {room.name} 
+                    </NameRoom>
+                    <NameRoom>
+                      {room.responsible} 
+                    </NameRoom>
+                    <NameRoom>
+                      {room.time_start} 
+                    </NameRoom>
+                    <NameRoom>
+                      {room.date_available} 
+                    </NameRoom>
+                    <NameRoom>
+                      {room.spots} 
+                    </NameRoom>
+                    <Button
+                      variant="contained"
+                      sx={{backgroundColor: 'green', color: '#111'}}
+                    >Reservar</Button>
+                  </Box>
+                ))}
+              </>
+              :
+              <span>Não existe salas disponives agora</span>}
+          </ul>
+        }
       </Container>
     </>
   )
